@@ -2401,5 +2401,5 @@ tau
 ga[99].fitness = 1129.46
 ga[99].fitness_relative = 3.10252
 End.
-17977470 micro sec
+18191875 micro sec
 ##### Deleat GA ... bye!

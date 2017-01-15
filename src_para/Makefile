@@ -1,5 +1,5 @@
 
-CXX = /usr/local/bin/g++-6
+CXX = /usr/local/Cellar/gcc/6.3.0_1/bin/g++-6
 TARGET = fujisaki_ga.exe
 # CXXFLAGS = -g -std=c++11 デバッグ用
 CXXFLAGS = -std=c++11
