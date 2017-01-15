@@ -11,7 +11,8 @@
 
 #include <iostream>
 #include <fstream>
-#include <omp.h> // openMPの関数を利用するため
+
+#include <chrono>
 
 using namespace std; // stdを先頭につける必要がなくなる
 
@@ -81,19 +82,25 @@ int main(int argc, char const *argv[]){
     Fuji_GA *ga;
     ga = new Fuji_GA( frame_size, seed ); // frame_sizeとseedでFuji_GAをコンストラクト
 
-    //誤差計算
-    for( int i = 0; i < GA_SIZE; ++i){
-      ga->calc_fitness( i, frame_size, target ); // ターゲットファイルと生成されたファイルとの1フレーム間誤差を計算
-    }
-    for (int k = 0; k < trial_times; ++k){
-      ga->selection(); // 選択を行う
-      ga->crossover(); // 交叉を行う
-      ga->mutation( frame_size ); // 突然変異を行う
-
+    #pragma omp parallel
+    {
+      #pragma omp for
+      //誤差計算
       for( int i = 0; i < GA_SIZE; ++i){
-        ga->calc_fitness( i, frame_size, target ); // 個体集団ソートのための誤差計算
+        ga->calc_fitness( i, frame_size, target ); // ターゲットファイルと生成されたファイルとの1フレーム間誤差を計算
       }
-      ga->sort_ga(); // 個体集団を誤差の昇順にソート
+      /*
+      for (int k = 0; k < trial_times; ++k){
+        ga->selection(); // 選択を行う
+        ga->crossover(); // 交叉を行う
+        ga->mutation( frame_size ); // 突然変異を行う
+
+        for( int i = 0; i < GA_SIZE; ++i){
+          ga->calc_fitness( i, frame_size, target ); // 個体集団ソートのための誤差計算
+        }
+        ga->sort_ga(); // 個体集団を誤差の昇順にソート
+      }
+      */
     }
     ga->show_gene(); // 個体集団の最終結果を表示する
 
@@ -104,7 +111,8 @@ int main(int argc, char const *argv[]){
   auto msec = chrono::duration_cast<chrono::microseconds>(dur).count();//要した時間をミリ秒(1/1000秒)に変換
   cout << msec << " micro sec" << endl;
 
-  delete ga; // 生成したFuji_GAオブジェクトを消去
-
+  #ifdef _OPENMP
+    delete ga; // 生成したFuji_GAオブジェクトを消去
+  #endif
   return 0;
 }

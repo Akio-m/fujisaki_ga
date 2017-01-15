@@ -20,7 +20,7 @@
 /** @def
  * 個体集団の数
  */
-#define GA_SIZE 40
+#define GA_SIZE 100
 /** @def
  * エリートコピー率
  * ELITE_COPY * GA_SIZE = 1にしなければならない。

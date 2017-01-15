@@ -6,5 +6,5 @@
   trial_time = 10
   print "seed : "
   puts seed
-  system("./fujisaki_ga.exe #{seed} #{trial_time} t_aiueo_F1.txt > result1_#{seed}_#{trial_time}.txt")
+  system("./fujisaki_ga.exe #{seed} #{trial_time} aiueo_F1.txt > result1_#{seed}_#{trial_time}.txt")
 }

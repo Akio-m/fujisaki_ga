@@ -22,6 +22,8 @@
 #include <cmath> // 数学系で必要
 #include <math.h> // 数学系で必要
 
+#include <omp.h> // openMPの関数を利用するため
+
 #include "parameter.h" // GAのパラメータ
 
 using namespace std; 

@@ -1,5 +1,5 @@
 
-CXX = clang++
+CXX = /usr/local/bin/g++-6
 TARGET = fujisaki_ga.exe
 # CXXFLAGS = -g -std=c++11 デバッグ用
 CXXFLAGS = -std=c++11
@@ -8,6 +8,6 @@ SRCS = Fujisaki_GA.cpp Fuji_GA.cpp calc_fitness.cpp crossover.cpp mutation.cpp s
 OBJS := $(SRCS:.cpp=.o) 
 
 $(TARGET): $(OBJS)
-				$(CXX) -o $@ $(OBJS)
+				$(CXX) -fopenmp -o $@ $(OBJS)
 clean:
 				rm -rf $(TARGET) $(OBJS)

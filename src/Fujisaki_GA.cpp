@@ -12,6 +12,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <chrono> //時間計測用
+
 using namespace std; // stdを先頭につける必要がなくなる
 
 /**
@@ -72,6 +74,8 @@ int main(int argc, char const *argv[]){
     target[ i ] = stod( str ); // strの中身をdouble化してtargetに格納
   }
 
+  auto start = chrono::system_clock::now(); //計測開始
+
   // GA開始
   // Fuji_GAオブジェクト生成
   Fuji_GA *ga;
@@ -92,6 +96,11 @@ int main(int argc, char const *argv[]){
     ga->sort_ga(); // 個体集団を誤差の昇順にソート
   }
   ga->show_gene(); // 個体集団の最終結果を表示する
+
+  auto end = chrono::system_clock::now(); //計測終了
+  auto dur = end - start;
+  auto msec = chrono::duration_cast<chrono::microseconds>(dur).count();//要した時間をミリ秒(1/1000秒)に変換
+  cout << msec << " micro sec" << endl;
 
   delete ga; // 生成したFuji_GAオブジェクトを消去
 
