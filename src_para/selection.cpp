@@ -25,8 +25,8 @@ void Fuji_GA::selection(){
   Fuji_Para param_temp[ GA_SIZE ]; // ga_listのコピー 
   vector< pair< double, int > > temp;
 
-  for( int i = 0; i < GA_SIZE; ++i ){
-    for (int j = 0; j < MORA_SIZE; ++j){
+  for(int i = 0; i < GA_SIZE; ++i ){
+    for(int j = 0; j < MORA_SIZE; ++j){
       param_temp[ i ].F_min[ j ] = ga_list[ i ]->F_min[ j ];
       param_temp[ i ].tau[ j ] = ga_list[ i ]->tau[ j ];
       param_temp[ i ].fitness = ga_list[ i ]->fitness;
