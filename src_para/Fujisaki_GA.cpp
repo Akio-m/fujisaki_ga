@@ -89,7 +89,7 @@ int main(int argc, char const *argv[]){
       for( int i = 0; i < GA_SIZE; ++i){
         ga->calc_fitness( i, frame_size, target ); // ターゲットファイルと生成されたファイルとの1フレーム間誤差を計算
       }
-      /*
+    }
       for (int k = 0; k < trial_times; ++k){
         ga->selection(); // 選択を行う
         ga->crossover(); // 交叉を行う
@@ -100,8 +100,7 @@ int main(int argc, char const *argv[]){
         }
         ga->sort_ga(); // 個体集団を誤差の昇順にソート
       }
-      */
-    }
+       
     ga->show_gene(); // 個体集団の最終結果を表示する
 
   #endif

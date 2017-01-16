@@ -27,6 +27,9 @@ void Fuji_GA::calc_fitness( const int gene_num, const int frame_size, const doub
   F_min[ 0 ] = 0.0; // F_min固定
   tau[ 0 ] = 7; // tau固定
 
+  #ifdef _OPENMP
+    #pragma omp for
+  #endif 
   // ga_listに影響がないようにコピーしておく
   for(int i = 0; i < MORA_SIZE; ++i){
     F_min[ i + 1 ] = ga_list[ gene_num ]->F_min[ i ]; 
@@ -35,6 +38,9 @@ void Fuji_GA::calc_fitness( const int gene_num, const int frame_size, const doub
 
   double F_diff[ MORA_SIZE ]; //! F_min差を格納しておく
 
+  #ifdef _OPENMP
+    #pragma omp for
+  #endif
   for(int i = 0; i < MORA_SIZE; ++i){
     F_diff[ i ] = F_min[ i + 1 ] - F_min[ i ];
   }
