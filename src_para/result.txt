@@ -1,33 +1,30 @@
 ##### GA is initializing...
-13897 micro sec
+15169 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-18605 micro sec
+12445 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-13803 micro sec
+16041 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-15613 micro sec
+12365 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-12439 micro sec
+13568 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-13330 micro sec
+12144 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-12943 micro sec
+13951 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-13318 micro sec
+13883 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-12972 micro sec
+14007 micro sec
 ##### Deleat GA ... bye!
 ##### GA is initializing...
-12354 micro sec
-##### Deleat GA ... bye!
-##### GA is initializing...
-12812 micro sec
+12104 micro sec
 ##### Deleat GA ... bye!
