@@ -30,7 +30,7 @@ void Fuji_GA::calc_fitness( const int gene_num, const int frame_size, const doub
   int i = 0;
   // ga_listに影響がないようにコピーしておく
   #ifdef _OPENMP
-    #pragma omp parallel for 
+    #pragma omp parallel for num_threads(2)
   #endif
   for(i = 0; i < MORA_SIZE; ++i){
     F_min[ i + 1 ] = ga_list[ gene_num ]->F_min[ i ]; 
