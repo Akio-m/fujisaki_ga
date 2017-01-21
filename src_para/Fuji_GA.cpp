@@ -28,7 +28,7 @@ Fuji_GA::Fuji_GA( const int frame_size, const int seed_arg ){
   int i = 0;
   int j = 0;
   #ifdef _OPENMP
-  #pragma omp prallel for private(j, search_range, seed)
+  #pragma omp prallel for private(j, search_range, seed) num_threads(2)
   for(i = 0; i < GA_SIZE; ++i){
     // 乱数生成オブジェクト生成
     mt19937_64 engine( seed + i ); // 乱数を個体ごとに変更するためseed + i
