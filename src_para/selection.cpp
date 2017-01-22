@@ -119,9 +119,9 @@ void Fuji_GA::selection(){
   }
 
   //ga_listに変更を書き込む
-  #ifdef _OPENMP
-  #pragma omp parallel for private(j) num_threads(2)
-  #endif
+  //#ifdef _OPENMP
+  //#pragma omp parallel for private(j) num_threads(2)
+  //#endif
   for(i = 0; i < GA_SIZE; ++i){
     for (j = 0; j < MORA_SIZE; ++j){
       ga_list[ i ]->F_min[ j ] = param_temp[ i ].F_min[ j ];
