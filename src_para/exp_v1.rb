@@ -2,9 +2,6 @@
 # Use  : ruby exp_v1.rb 
 # 藤崎GA実行時のseed値を1 ~ 100まで自動実行するスクリプトです。
 
-1.step(100,1){|seed|
-  trial_time = 10
-  print "seed : "
-  puts seed
-  system("./fujisaki_ga.exe #{seed} #{trial_time} aiueo_F1.txt > result1_#{seed}_#{trial_time}.txt")
+1.step(10,1){
+  system("./fujisaki_ga.exe 10 1000 aiueo_F1.txt >> result.txt")
 }
