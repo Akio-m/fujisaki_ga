@@ -8,6 +8,6 @@ SRCS = Fujisaki_GA.cpp Fuji_GA.cpp calc_fitness.cpp crossover.cpp mutation.cpp s
 OBJS := $(SRCS:.cpp=.o) 
 
 $(TARGET): $(OBJS)
-				$(CXX) -fopenmp -o $@ $(OBJS)
+				$(CXX) -o $@ $(OBJS)
 clean:
 				rm -rf $(TARGET) $(OBJS)
