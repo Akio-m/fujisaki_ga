@@ -27,9 +27,9 @@ void Fuji_GA::selection(){
 
   int i = 0;
   int j = 0;
-  #ifdef _OPENMP
-  #pragma omp parallel for private(j) num_threads(2)
-  #endif 
+  //#ifdef _OPENMP
+  //#pragma omp parallel for private(j) num_threads(2)
+  //#endif 
   for(i = 0; i < GA_SIZE; ++i ){
     for(j = 0; j < MORA_SIZE; ++j){
       param_temp[ i ].F_min[ j ] = ga_list[ i ]->F_min[ j ];
@@ -37,13 +37,13 @@ void Fuji_GA::selection(){
       param_temp[ i ].fitness = ga_list[ i ]->fitness;
       param_temp[ i ].fitness_relative = ga_list[ i ]->fitness_relative;
     }
-    //temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) );
+    temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) );
   }
-  
+  /*
   for(i = 0; i < GA_SIZE; ++i){
     temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) );
   }
-
+  */
 
   // エリート戦略
   //! エリート個体数を得る
