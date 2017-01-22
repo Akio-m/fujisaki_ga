@@ -25,7 +25,12 @@ Fuji_GA::Fuji_GA( const int frame_size, const int seed_arg ){
   // 仮の構造体を利用して、それをmapに格納していく
   Fuji_Para *param_gene_pointer = NULL; // メモリリーク阻止のためNULL
 
-  for(int i = 0; i < GA_SIZE; ++i){
+  int i = 0;
+  int j = 0;
+  #ifdef _OPENMP
+  #pragma omp prallel for private(j, search_range, seed) num_threads(2)
+  #endif
+  for(i = 0; i < GA_SIZE; ++i){
 
     // 乱数生成オブジェクト生成
     mt19937_64 engine( seed + i ); // 乱数を個体ごとに変更するためseed + i
@@ -33,7 +38,7 @@ Fuji_GA::Fuji_GA( const int frame_size, const int seed_arg ){
     uniform_int_distribution< int > int_Distribution( 1, search_range );// tau値探索範囲を整数で1 ~ 15まで
 
     // Fuji_Para構造体の初期化
-    for(int j = 0; j < MORA_SIZE; ++j){
+    for(j = 0; j < MORA_SIZE; ++j){
 
       // F値の初期化
       param_gene[ i ].F_min[ j ] = real_Distribution( engine );

@@ -27,15 +27,16 @@ void Fuji_GA::calc_fitness( const int gene_num, const int frame_size, const doub
   F_min[ 0 ] = 0.0; // F_min固定
   tau[ 0 ] = 7; // tau固定
 
+  int i = 0;
   // ga_listに影響がないようにコピーしておく
-  for(int i = 0; i < MORA_SIZE; ++i){
+  for(i = 0; i < MORA_SIZE; ++i){
     F_min[ i + 1 ] = ga_list[ gene_num ]->F_min[ i ]; 
     tau[ i + 1 ] = ga_list[ gene_num ]->tau[ i ] + 10; // 最初に10秒を置く
   }
 
   double F_diff[ MORA_SIZE ]; //! F_min差を格納しておく
 
-  for(int i = 0; i < MORA_SIZE; ++i){
+  for(i = 0; i < MORA_SIZE; ++i){
     F_diff[ i ] = F_min[ i + 1 ] - F_min[ i ];
   }
 
@@ -47,10 +48,14 @@ void Fuji_GA::calc_fitness( const int gene_num, const int frame_size, const doub
   double result = 0.0; //! 藤崎モデルの出力とターゲットとの誤差を保持
   double result_show = 0.0;
 
-  for(int s = 1; s < frame_size + 10; ++s){
+  int s = 0;
+  #ifdef _OPENMP
+  #pragma omp parallel for private(i, temp_time, temp, unit_step, accumuler) num_threads(2) collapse(1)
+  #endif
+  for(s = 1; s < frame_size + 10; ++s){
     
     accumuler = 0.0;
-    for(int i = 0; i < MORA_SIZE; ++i){
+    for(i = 0; i < MORA_SIZE; ++i){
     
       temp_time = ( s - tau[ i ] ) / 100.0;
 
@@ -67,8 +72,11 @@ void Fuji_GA::calc_fitness( const int gene_num, const int frame_size, const doub
 
     F_result[ s ] = F_min[ 0 ] + accumuler; // ここのF_minを出力したら藤崎モデルの出力を見ることができる
   }
-  
-  for(int s = 11; s < frame_size + 10; ++s){
+
+  #ifdef _OPENMP
+  #pragma omp parallel for reduction(+:result, result_show) num_threads(2) schedule(static,1)
+  #endif
+  for(s = 11; s < frame_size + 10; ++s){
     result += fabs( target[ s - 11 ] - F_result[ s ] ); //誤差の絶対値累積
     result_show += fabs( (target[ s - 11 ] - F_result[ s ]) / target[ s - 11 ] ); //誤差の相対値累積
   }

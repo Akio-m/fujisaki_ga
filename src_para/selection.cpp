@@ -25,16 +25,26 @@ void Fuji_GA::selection(){
   Fuji_Para param_temp[ GA_SIZE ]; // ga_listのコピー 
   vector< pair< double, int > > temp;
 
-  for(int i = 0; i < GA_SIZE; ++i ){
-    for(int j = 0; j < MORA_SIZE; ++j){
+  int i = 0;
+  int j = 0;
+  #ifdef _OPENMP
+  #pragma omp parallel for private(j) num_threads(2)
+  #endif
+  for(i = 0; i < GA_SIZE; ++i ){
+    for(j = 0; j < MORA_SIZE; ++j){
       param_temp[ i ].F_min[ j ] = ga_list[ i ]->F_min[ j ];
       param_temp[ i ].tau[ j ] = ga_list[ i ]->tau[ j ];
       param_temp[ i ].fitness = ga_list[ i ]->fitness;
       param_temp[ i ].fitness_relative = ga_list[ i ]->fitness_relative;
     }
-    temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) );
+    //temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) );
   }
 
+  for(i = 0; i < GA_SIZE; ++i){
+    temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) );
+  }
+  
+  }
   // エリート戦略
   //! エリート個体数を得る
   int elite_num = ( int )( GA_SIZE * ELITE_COPY ); // エリート数を決める
@@ -109,8 +119,11 @@ void Fuji_GA::selection(){
   }
 
   //ga_listに変更を書き込む
-  for(int i = 0; i < GA_SIZE; ++i){
-    for (int j = 0; j < MORA_SIZE; ++j){
+  #ifdef _OPENMP
+  #pragma omp parallel for private(j) num_threads(2)
+  #endif 
+  for(i = 0; i < GA_SIZE; ++i){
+    for (j = 0; j < MORA_SIZE; ++j){
       ga_list[ i ]->F_min[ j ] = param_temp[ i ].F_min[ j ];
       ga_list[ i ]->tau[ j ] = param_temp[ i ].tau[ j ];
     }
