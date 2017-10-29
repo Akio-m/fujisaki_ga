@@ -66,53 +66,51 @@ int main(int argc, char const *argv[]){
   getline( reading_file, str ); // ファイルから1行をstrに格納
   frame_size = stoi( str ); // strをint化してframe_sizeに格納
 
+  int i = 0;
   // target読み込み
   //! ターゲットファイルの中身を格納
   double target[ frame_size ]; // targetは0 ~ frame_size-1まで
-  for (int i = 0; i < frame_size; ++i){
+  for (i = 0; i < frame_size; ++i){
     getline( reading_file, str );
     target[ i ] = stod( str ); // strの中身をdouble化してtargetに格納
   }
 
   auto start = chrono::system_clock::now(); //計測開始
 
+  // GA開始
+  // Fuji_GAオブジェクト生成
+  Fuji_GA *ga;
+  ga = new Fuji_GA( frame_size, seed ); // frame_sizeとseedでFuji_GAをコンストラクト
+
   #ifdef _OPENMP
-    // GA開始
-    // Fuji_GAオブジェクト生成
-    Fuji_GA *ga;
-    ga = new Fuji_GA( frame_size, seed ); // frame_sizeとseedでFuji_GAをコンストラクト
-
-    //#pragma omp parallel
-    //{
-      //#pragma omp for
-      //誤差計算
-      for( int i = 0; i < GA_SIZE; ++i){
-        ga->calc_fitness( i, frame_size, target ); // ターゲットファイルと生成されたファイルとの1フレーム間誤差を計算
-      }
-    //}
-    /*
-      for (int k = 0; k < trial_times; ++k){
-        ga->selection(); // 選択を行う
-        ga->crossover(); // 交叉を行う
-        ga->mutation( frame_size ); // 突然変異を行う
-
-        for( int i = 0; i < GA_SIZE; ++i){
-          ga->calc_fitness( i, frame_size, target ); // 個体集団ソートのための誤差計算
-        }
-        ga->sort_ga(); // 個体集団を誤差の昇順にソート
-      }
-    
-    ga->show_gene(); // 個体集団の最終結果を表示する
-    */
+  #pragma omp parallel for num_threads(2)
   #endif
+  //誤差計算
+  for(i = 0; i < GA_SIZE; ++i){
+    ga->calc_fitness( i, frame_size, target ); // ターゲットファイルと生成されたファイルとの1フレーム間誤差を計算
+  }
+    
+  for (int k = 0; k < trial_times; ++k){
+    ga->selection(); // 選択を行う
+    ga->crossover(); // 交叉を行う
+    ga->mutation( frame_size ); // 突然変異を行う
+
+    #ifdef _OPENMP
+    #pragma omp parallel for num_threads(2)
+    #endif
+    for(i = 0; i < GA_SIZE; ++i){
+      ga->calc_fitness( i, frame_size, target ); // 個体集団ソートのための誤差計算
+    }
+    ga->sort_ga(); // 個体集団を誤差の昇順にソート
+  }
+    
+  //ga->show_gene(); // 個体集団の最終結果を表示する
 
   auto end = chrono::system_clock::now(); //計測終了
   auto dur = end - start;
   auto msec = chrono::duration_cast<chrono::microseconds>(dur).count();//要した時間をミリ秒(1/1000秒)に変換
   cout << msec << " micro sec" << endl;
 
-  #ifdef _OPENMP
-    delete ga; // 生成したFuji_GAオブジェクトを消去
-  #endif
+  delete ga; // 生成したFuji_GAオブジェクトを消去
   return 0;
 }

@@ -22,24 +22,35 @@ void Fuji_GA::sort_ga(){
   Fuji_Para param_temp[ GA_SIZE ]; // ga_listのコピー
   vector< pair< double, int > > temp;
 
+  int i = 0;
+  int j = 0;
   // 仮のga_listに全てコピーする
-  for( int i = 0; i < GA_SIZE; ++i ){
-    for (int j = 0; j < MORA_SIZE; ++j){
+  #ifdef _OPENMP
+  #pragma omp parallel for private(j) num_threads(2)
+  #endif
+  for(i = 0; i < GA_SIZE; ++i ){
+    for (j = 0; j < MORA_SIZE; ++j){
       param_temp[ i ].F_min[ j ] = ga_list[ i ]->F_min[ j ];
       param_temp[ i ].tau[ j ] = ga_list[ i ]->tau[ j ];
       param_temp[ i ].fitness = ga_list[ i ]->fitness;
       param_temp[ i ].fitness_relative = ga_list[ i ]->fitness_relative;
     }
     // pairで個体適応度と構造体番号を入れるから、sortしたあとでも呼び出せる
-    temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) ); // 個体適応度, 構造体番号 
+    //temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) ); // 個体適応度, 構造体番号 
   }
 
+  for(i = 0; i < GA_SIZE; ++i){
+    temp.push_back( pair< double, int > ( ga_list[ i ]->fitness, i ) ); // 個体適応度, 構造体番号 
+  }
   // tempをソート
   sort( temp.begin(), temp.end() );
 
   //ga_listに変更を書き込む
-  for(int i = 0; i < GA_SIZE; ++i){
-    for (int j = 0; j < MORA_SIZE; ++j){
+  #ifdef _OPENMP
+  #pragma omp parallel for private(j) num_threads(2)
+  #endif
+  for(i = 0; i < GA_SIZE; ++i){
+    for (j = 0; j < MORA_SIZE; ++j){
       ga_list[ i ]->F_min[ j ] = param_temp[ temp[ i ].second ].F_min[ j ];
       ga_list[ i ]->tau[ j ] = param_temp[ temp[ i ].second ].tau[ j ];
     }
